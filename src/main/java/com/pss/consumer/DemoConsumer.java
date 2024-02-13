@@ -14,11 +14,11 @@ import java.util.Map;
 @Component
 @Slf4j
 public class DemoConsumer {
-    private final Map<String, DemoMessageHandler<?>> handlerMap;
+    private final Map<String, DemoMessageHandler<?>> actionHandlers;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public DemoConsumer(Map<String, DemoMessageHandler<?>> handlerMap) {
-        this.handlerMap = handlerMap;
+    public DemoConsumer(Map<String, DemoMessageHandler<?>> actionHandlers) {
+        this.actionHandlers = actionHandlers;
     }
 
     @KafkaListener(topics = "route.demo.topic", groupId = "group_id")
@@ -26,14 +26,13 @@ public class DemoConsumer {
 
         log.info(message);
 
-        MessageEnvelop<?> messageEnvelop = toMessageEnvelop(message);
-        String action = messageEnvelop.getAction();
+        MessageEnvelop<?> msgEnvelop = toMessageEnvelop(message);
+        String action = msgEnvelop.getAction();
 
-        DemoMessageHandler<?> messageHandler = handlerMap.get(action);
-        Class<?> aClass = messageHandler.payloadClass();
-        Object payload = toPayloadType(messageEnvelop.getPayload(), aClass);
+        DemoMessageHandler<?> msgHandler = actionHandlers.get(action);
+        Object payload = toPayloadType(msgEnvelop.getPayload(), msgHandler.payloadClass());
 
-        messageHandler.processMessage(payload);
+        msgHandler.processMessage(payload);
 
 
     }
