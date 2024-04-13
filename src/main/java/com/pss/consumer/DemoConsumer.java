@@ -3,37 +3,56 @@ package com.pss.consumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pss.handler.DemoMessageHandler;
+import com.pss.annotation.PayloadAction;
+import com.pss.handler.MessageHandler;
 import com.pss.model.MessageEnvelop;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
 @Slf4j
 public class DemoConsumer {
-    private final Map<String, DemoMessageHandler<?>> actionHandlers;
+    private final Map<String, Method> actionMethods = new HashMap<>();
+    private final Map<String, MessageHandler> actionObjects = new HashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public DemoConsumer(Map<String, DemoMessageHandler<?>> actionHandlers) {
-        this.actionHandlers = actionHandlers;
+    public DemoConsumer(List<MessageHandler> actionHandlers) {
+       for(MessageHandler actionHandler : actionHandlers){
+          boolean isPayloadActionAnnotationPresent = false;
+           Method[] methods = actionHandler.getClass().getMethods();
+           for (Method method : methods) {
+               if(method.isAnnotationPresent(PayloadAction.class)){
+                   PayloadAction annotation = method.getAnnotation(PayloadAction.class);
+                   this.actionMethods.put(annotation.value(), method);
+                   this.actionObjects.put(annotation.value(), actionHandler);
+                   isPayloadActionAnnotationPresent = true;
+                   break;
+               }
+           }
+           if(!isPayloadActionAnnotationPresent){
+               throw new RuntimeException("PayloadAction annotation missing on method of " + actionHandler.getClass());
+           }
+       }
     }
 
     @KafkaListener(topics = "route.demo.topic", groupId = "group_id")
-    public void consume(String message) {
+    public void consume(String message) throws InvocationTargetException, IllegalAccessException {
 
         log.info(message);
 
         MessageEnvelop<?> msgEnvelop = toMessageEnvelop(message);
         String action = msgEnvelop.getAction();
-
-        DemoMessageHandler<?> msgHandler = actionHandlers.get(action);
-        Object payload = toPayloadType(msgEnvelop.getPayload(), msgHandler.payloadClass());
-
-        msgHandler.processMessage(payload);
-
+        Method method = actionMethods.get(action);
+        Class<?> parameterType = method.getParameterTypes()[0];
+        Object payload = toPayloadType(msgEnvelop.getPayload(), parameterType);
+        method.invoke(actionObjects.get(action), payload);
 
     }
 

@@ -1,23 +1,15 @@
 package com.pss.handler;
 
+import com.pss.annotation.PayloadAction;
 import com.pss.model.ActionType;
 import com.pss.model.Address;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component(ActionType.UPDATE_ADDRESS)
-public class AddressMessageHandler implements DemoMessageHandler<Address>{
+public class AddressMessageHandler implements MessageHandler {
 
-    @Override
-    public Class<Address> payloadClass() {
-       return Address.class;
-    }
-
-
-    @Override
-    public void processMessage(Object obj) {
-        Address address = payloadClass().cast(obj);
+    @PayloadAction(ActionType.UPDATE_ADDRESS)
+    public void processMessage(Address address) {
         log.info("Address "+address);
     }
 }

@@ -2,8 +2,6 @@ package com.pss.consumer;
 
 import com.pss.handler.AddressMessageHandler;
 import com.pss.handler.ContactMessageHandler;
-import com.pss.handler.DemoMessageHandler;
-import com.pss.model.ActionType;
 import com.pss.model.Address;
 import com.pss.model.Contact;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -30,14 +29,12 @@ class DemoConsumerTest {
 
     @BeforeEach
     public void setup() {
-        Map<String, DemoMessageHandler<?>> handlerMap = Map.of(ActionType.UPDATE_ADDRESS, addressMessageHandler,
-                ActionType.UPDATE_CONTACT, contactMessageHandler);
-        demoConsumer = new DemoConsumer(handlerMap);
+        demoConsumer = new DemoConsumer(List.of(addressMessageHandler, contactMessageHandler));
     }
 
 
     @Test
-    public void testAddressHandler() {
+    public void testAddressHandler() throws InvocationTargetException, IllegalAccessException {
         String payload = """
                 {
                   "action": "Update_Address",
@@ -55,7 +52,7 @@ class DemoConsumerTest {
     }
 
     @Test
-    public void testContactHandler() {
+    public void testContactHandler() throws InvocationTargetException, IllegalAccessException {
         String payload = """
                 {
                   "action": "Update_Contact",

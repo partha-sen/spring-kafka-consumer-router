@@ -1,20 +1,15 @@
 package com.pss.handler;
 
+import com.pss.annotation.PayloadAction;
 import com.pss.model.ActionType;
 import com.pss.model.Contact;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component(ActionType.UPDATE_CONTACT)
-public class ContactMessageHandler implements DemoMessageHandler<Contact>{
+public class ContactMessageHandler implements MessageHandler {
 
-    @Override
-    public Class<Contact> payloadClass() {
-        return Contact.class;
-    }
-    public void processMessage(Object obj) {
-        Contact contact = payloadClass().cast(obj);
+    @PayloadAction(ActionType.UPDATE_CONTACT)
+    public void processMessage(Contact contact) {
         log.info("Contact "+contact);
     }
 }
