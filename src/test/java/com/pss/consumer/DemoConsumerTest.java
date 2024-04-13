@@ -48,7 +48,7 @@ class DemoConsumerTest {
                 }
                 """;
         demoConsumer.consume(payload);
-        verify(addressMessageHandler, times(1)).processMessage(any(Address.class));
+        verify(addressMessageHandler, times(1)).updateAddress(any(Address.class));
     }
 
     @Test
@@ -63,7 +63,7 @@ class DemoConsumerTest {
                 }
                 """;
         demoConsumer.consume(payload);
-        verify(contactMessageHandler, times(1)).processMessage(any(Contact.class));
+        verify(contactMessageHandler, times(1)).updateContract(any(Contact.class));
     }
 
 }

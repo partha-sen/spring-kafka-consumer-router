@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ContactMessageHandler implements MessageHandler {
 
     @PayloadAction(ActionType.UPDATE_CONTACT)
-    public void processMessage(Contact contact) {
+    public void updateContract(Contact contact) {
         log.info("Contact "+contact);
     }
 }

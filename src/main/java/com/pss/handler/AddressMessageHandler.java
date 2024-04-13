@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AddressMessageHandler implements MessageHandler {
 
     @PayloadAction(ActionType.UPDATE_ADDRESS)
-    public void processMessage(Address address) {
+    public void updateAddress(Address address) {
         log.info("Address "+address);
     }
 }
