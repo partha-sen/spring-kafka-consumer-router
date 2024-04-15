@@ -5,7 +5,7 @@ import com.pss.handler.ContactMessageHandler;
 import com.pss.handler.MessageHandler;
 import com.pss.model.Address;
 import com.pss.model.Contact;
-import com.pss.router.MessageRouter;
+import com.tiny.router.MessageRouter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

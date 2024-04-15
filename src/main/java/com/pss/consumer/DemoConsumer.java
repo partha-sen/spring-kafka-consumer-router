@@ -1,7 +1,7 @@
 package com.pss.consumer;
 
 import com.pss.handler.MessageHandler;
-import com.pss.router.MessageRouter;
+import com.tiny.router.MessageRouter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

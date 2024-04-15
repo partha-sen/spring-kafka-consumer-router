@@ -1,4 +1,4 @@
-package com.pss.annotation;
+package com.tiny.router;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
