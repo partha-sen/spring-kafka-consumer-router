@@ -7,15 +7,14 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 @Component
 @Slf4j
 public class DemoConsumer {
     private final MessageRouter<MessageHandler> messageRouter;
 
-    public DemoConsumer(List<MessageHandler> actionHandlers) {
-        messageRouter = new MessageRouter<>(actionHandlers);
+    public DemoConsumer(MessageRouter<MessageHandler> messageRouter) {
+        this.messageRouter = messageRouter;
     }
 
     @KafkaListener(topics = "route.demo.topic", groupId = "group_id")

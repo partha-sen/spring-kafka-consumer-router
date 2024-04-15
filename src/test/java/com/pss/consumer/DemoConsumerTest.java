@@ -2,8 +2,10 @@ package com.pss.consumer;
 
 import com.pss.handler.AddressMessageHandler;
 import com.pss.handler.ContactMessageHandler;
+import com.pss.handler.MessageHandler;
 import com.pss.model.Address;
 import com.pss.model.Contact;
+import com.pss.router.MessageRouter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +31,8 @@ class DemoConsumerTest {
 
     @BeforeEach
     public void setup() {
-        demoConsumer = new DemoConsumer(List.of(addressMessageHandler, contactMessageHandler));
+        MessageRouter<MessageHandler> messageRouter = new MessageRouter<>(List.of(addressMessageHandler, contactMessageHandler));
+        demoConsumer = new DemoConsumer(messageRouter);
     }
 
 
