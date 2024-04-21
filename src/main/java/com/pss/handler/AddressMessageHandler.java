@@ -1,6 +1,6 @@
 package com.pss.handler;
 
-import com.tiny.router.PayloadAction;
+import com.tiny.router.annotation.PayloadAction;
 import com.pss.model.ActionType;
 import com.pss.model.Address;
 import lombok.extern.slf4j.Slf4j;
