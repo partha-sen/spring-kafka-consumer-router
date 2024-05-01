@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ContactMessageHandler implements MessageHandler {
+public class ContactProfileMessageHandler implements ProfileMessageHandler {
 
     @RouteEntry(action=ActionType.UPDATE_CONTACT)
     public void updateContract(Contact contact) {

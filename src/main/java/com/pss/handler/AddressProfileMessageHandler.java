@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class AddressMessageHandler implements MessageHandler {
+public class AddressProfileMessageHandler implements ProfileMessageHandler {
 
     @RouteEntry(action=ActionType.UPDATE_ADDRESS)
     public void updateAddress(Address address) {

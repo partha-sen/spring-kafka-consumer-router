@@ -1,6 +1,6 @@
 package com.pss.consumer;
 
-import com.pss.handler.MessageHandler;
+import com.pss.handler.ProfileMessageHandler;
 import com.tiny.router.MessageRouter;
 import com.tiny.router.exception.RouteNotFoundException;
 import com.tiny.router.model.MessageEnvelop;
@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class DemoConsumer {
-    private final MessageRouter<MessageHandler> messageRouter;
+public class ProfileConsumer {
+    private final MessageRouter<ProfileMessageHandler> messageRouter;
 
-    public DemoConsumer(MessageRouter<MessageHandler> messageRouter) {
+    public ProfileConsumer(MessageRouter<ProfileMessageHandler> messageRouter) {
         this.messageRouter = messageRouter;
     }
 
-    @KafkaListener(topics = "route.demo.topic", groupId = "group_id")
+    @KafkaListener(topics = "route.profile.topic", groupId = "group_id")
     public void consume(MessageEnvelop<String> message) {
         log.info("message route path {}", message.routePath());
         log.info("message payload {}", message.getPayload());

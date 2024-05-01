@@ -1,8 +1,8 @@
 package com.pss.consumer;
 
-import com.pss.handler.AddressMessageHandler;
-import com.pss.handler.ContactMessageHandler;
-import com.pss.handler.MessageHandler;
+import com.pss.handler.AddressProfileMessageHandler;
+import com.pss.handler.ContactProfileMessageHandler;
+import com.pss.handler.ProfileMessageHandler;
 import com.pss.model.ActionType;
 import com.pss.model.Address;
 import com.pss.model.Contact;
@@ -25,19 +25,19 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
-class DemoConsumerTest {
+class ProfileConsumerTest {
 
-    private DemoConsumer demoConsumer;
+    private ProfileConsumer profileConsumer;
     @Spy
-    private AddressMessageHandler addressMessageHandler = new AddressMessageHandler();
+    private AddressProfileMessageHandler addressMessageHandler = new AddressProfileMessageHandler();
     @Spy
-    private ContactMessageHandler contactMessageHandler = new ContactMessageHandler();
+    private ContactProfileMessageHandler contactMessageHandler = new ContactProfileMessageHandler();
 
     @BeforeEach
     public void setup() {
         try {
-            MessageRouter<MessageHandler> messageRouter = new MessageRouter<>(List.of(addressMessageHandler, contactMessageHandler));
-            demoConsumer = new DemoConsumer(messageRouter);
+            MessageRouter<ProfileMessageHandler> messageRouter = new MessageRouter<>(List.of(addressMessageHandler, contactMessageHandler));
+            profileConsumer = new ProfileConsumer(messageRouter);
         } catch (DuplicateRouteException | InvalidRoutingMethodSignatureException | RouteEntryMissingException e) {
             throw new RuntimeException(e);
         }
@@ -57,7 +57,7 @@ class DemoConsumerTest {
                   }
                 """;
         MessageEnvelop<String> messageEnvelop = new MessageEnvelop<>(ActionType.UPDATE_ADDRESS, payload);
-        demoConsumer.consume(messageEnvelop);
+        profileConsumer.consume(messageEnvelop);
         verify(addressMessageHandler, times(1)).updateAddress(any(Address.class));
     }
 
@@ -70,7 +70,7 @@ class DemoConsumerTest {
                 }
                 """;
         MessageEnvelop<String> messageEnvelop = new MessageEnvelop<>(ActionType.UPDATE_CONTACT, payload);
-        demoConsumer.consume(messageEnvelop);
+        profileConsumer.consume(messageEnvelop);
         verify(contactMessageHandler, times(1)).updateContract(any(Contact.class));
     }
 
