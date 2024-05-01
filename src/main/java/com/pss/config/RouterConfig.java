@@ -11,7 +11,7 @@ import java.util.List;
 @Configuration
 public class RouterConfig {
     @Bean
-    MessageRouter<MessageHandler> buildMessageRouter(@Autowired  List<MessageHandler> actionHandlers){
+    MessageRouter<MessageHandler> buildMessageRouter(@Autowired  List<MessageHandler> actionHandlers) throws Exception {
         return new MessageRouter<>(actionHandlers);
     }
 

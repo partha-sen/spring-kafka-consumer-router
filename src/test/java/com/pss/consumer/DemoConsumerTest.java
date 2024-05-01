@@ -3,9 +3,14 @@ package com.pss.consumer;
 import com.pss.handler.AddressMessageHandler;
 import com.pss.handler.ContactMessageHandler;
 import com.pss.handler.MessageHandler;
+import com.pss.model.ActionType;
 import com.pss.model.Address;
 import com.pss.model.Contact;
 import com.tiny.router.MessageRouter;
+import com.tiny.router.exception.DuplicateRouteException;
+import com.tiny.router.exception.InvalidRoutingMethodSignatureException;
+import com.tiny.router.exception.RouteEntryMissingException;
+import com.tiny.router.model.MessageEnvelop;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,41 +36,42 @@ class DemoConsumerTest {
 
     @BeforeEach
     public void setup() {
-        MessageRouter<MessageHandler> messageRouter = new MessageRouter<>(List.of(addressMessageHandler, contactMessageHandler));
-        demoConsumer = new DemoConsumer(messageRouter);
+        try {
+            MessageRouter<MessageHandler> messageRouter = new MessageRouter<>(List.of(addressMessageHandler, contactMessageHandler));
+            demoConsumer = new DemoConsumer(messageRouter);
+        } catch (DuplicateRouteException | InvalidRoutingMethodSignatureException | RouteEntryMissingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     @Test
-    public void testAddressHandler() throws InvocationTargetException, IllegalAccessException {
+    public void testAddressHandler() {
+
         String payload = """
-                {
-                  "action": "Update_Address",
-                  "payload": {
+                    {
                     "state": "Delhi",
                     "country": "India",
                     "areaCode": "110011",
                     "addressLine1": "chanakyapuri",
                     "addressLine2": "Nehru Park"
                   }
-                }
                 """;
-        demoConsumer.consume(payload);
+        MessageEnvelop<String> messageEnvelop = new MessageEnvelop<>(ActionType.UPDATE_ADDRESS, payload);
+        demoConsumer.consume(messageEnvelop);
         verify(addressMessageHandler, times(1)).updateAddress(any(Address.class));
     }
 
     @Test
-    public void testContactHandler() throws InvocationTargetException, IllegalAccessException {
+    public void testContactHandler() {
         String payload = """
                 {
-                  "action": "Update_Contact",
-                  "payload": {
-                    "mobileNo": "1111100000",
-                    "email": "user@maildomain.com"
-                  }
+                 "mobileNo": "1111100000",
+                 "email": "user@maildomain.com"
                 }
                 """;
-        demoConsumer.consume(payload);
+        MessageEnvelop<String> messageEnvelop = new MessageEnvelop<>(ActionType.UPDATE_CONTACT, payload);
+        demoConsumer.consume(messageEnvelop);
         verify(contactMessageHandler, times(1)).updateContract(any(Contact.class));
     }
 

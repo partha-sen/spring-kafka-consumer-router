@@ -37,7 +37,7 @@
         <dependency>
             <groupId>io.github.partha-sen</groupId>
             <artifactId>tiny-router</artifactId>
-            <version>1.0-0</version>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>

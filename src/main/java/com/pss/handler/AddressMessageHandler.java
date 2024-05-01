@@ -1,8 +1,9 @@
 package com.pss.handler;
 
-import com.tiny.router.annotation.PayloadAction;
+
 import com.pss.model.ActionType;
 import com.pss.model.Address;
+import com.tiny.router.annotation.RouteEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddressMessageHandler implements MessageHandler {
 
-    @PayloadAction(ActionType.UPDATE_ADDRESS)
+    @RouteEntry(action=ActionType.UPDATE_ADDRESS)
     public void updateAddress(Address address) {
         log.info("Address "+address);
     }

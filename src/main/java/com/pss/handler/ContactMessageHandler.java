@@ -1,8 +1,8 @@
 package com.pss.handler;
 
-import com.tiny.router.annotation.PayloadAction;
 import com.pss.model.ActionType;
 import com.pss.model.Contact;
+import com.tiny.router.annotation.RouteEntry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContactMessageHandler implements MessageHandler {
 
-    @PayloadAction(ActionType.UPDATE_CONTACT)
+    @RouteEntry(action=ActionType.UPDATE_CONTACT)
     public void updateContract(Contact contact) {
         log.info("Contact "+contact);
     }
