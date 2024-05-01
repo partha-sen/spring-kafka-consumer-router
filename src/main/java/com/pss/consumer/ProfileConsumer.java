@@ -2,7 +2,6 @@ package com.pss.consumer;
 
 import com.pss.handler.ProfileMessageHandler;
 import com.tiny.router.MessageRouter;
-import com.tiny.router.exception.RouteNotFoundException;
 import com.tiny.router.model.MessageEnvelop;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,8 +22,10 @@ public class ProfileConsumer {
         log.info("message payload {}", message.getPayload());
         try {
             messageRouter.route(message);
-        } catch (RouteNotFoundException e) {
-            log.error("Route not define for rout path "+message.routePath(), e);
+            log.info("message dispatch successfully");
+        } catch (RuntimeException e) {
+            log.info("message dispatch failed");
+            log.error("Fail to route message ", e);
         }
     }
 
