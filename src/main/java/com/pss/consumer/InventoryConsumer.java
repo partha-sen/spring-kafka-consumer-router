@@ -1,6 +1,6 @@
 package com.pss.consumer;
 
-import com.pss.handler.ProfileHandler;
+import com.pss.handler.InventoryHandler;
 import com.tiny.router.MessageRouter;
 import com.tiny.router.model.MessageEnvelop;
 import lombok.extern.slf4j.Slf4j;
@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class ProfileConsumer {
-    private final MessageRouter<ProfileHandler> messageRouter;
+public class InventoryConsumer {
+    private final MessageRouter<InventoryHandler> messageRouter;
 
-    public ProfileConsumer(MessageRouter<ProfileHandler> messageRouter) {
+    public InventoryConsumer(MessageRouter<InventoryHandler> messageRouter) {
         this.messageRouter = messageRouter;
     }
 
-    @KafkaListener(topics = "route.profile.topic", groupId = "group_id")
+    @KafkaListener(topics = "route.inventory.topic", groupId = "group_id")
     public void consume(MessageEnvelop<String> message) {
         log.info("message route path {}", message.routePath());
         log.info("message payload {}", message.getPayload());

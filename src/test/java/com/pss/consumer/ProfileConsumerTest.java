@@ -1,8 +1,8 @@
 package com.pss.consumer;
 
-import com.pss.handler.AddressProfileMessageHandler;
-import com.pss.handler.ContactProfileMessageHandler;
-import com.pss.handler.ProfileMessageHandler;
+import com.pss.handler.impl.AddressHandler;
+import com.pss.handler.impl.ContactHandler;
+import com.pss.handler.ProfileHandler;
 import com.pss.model.ActionType;
 import com.pss.model.Address;
 import com.pss.model.Contact;
@@ -29,14 +29,14 @@ class ProfileConsumerTest {
 
     private ProfileConsumer profileConsumer;
     @Spy
-    private AddressProfileMessageHandler addressMessageHandler = new AddressProfileMessageHandler();
+    private AddressHandler addressMessageHandler = new AddressHandler();
     @Spy
-    private ContactProfileMessageHandler contactMessageHandler = new ContactProfileMessageHandler();
+    private ContactHandler contactMessageHandler = new ContactHandler();
 
     @BeforeEach
     public void setup() {
         try {
-            MessageRouter<ProfileMessageHandler> messageRouter = new MessageRouter<>(List.of(addressMessageHandler, contactMessageHandler));
+            MessageRouter<ProfileHandler> messageRouter = new MessageRouter<>(List.of(addressMessageHandler, contactMessageHandler));
             profileConsumer = new ProfileConsumer(messageRouter);
         } catch (DuplicateRouteException | InvalidRoutingMethodSignatureException | RouteEntryMissingException e) {
             throw new RuntimeException(e);

@@ -1,5 +1,6 @@
-package com.pss.handler;
+package com.pss.handler.impl;
 
+import com.pss.handler.ProfileHandler;
 import com.pss.model.ActionType;
 import com.pss.model.Contact;
 import com.tiny.router.annotation.RouteEntry;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ContactProfileMessageHandler implements ProfileMessageHandler {
+public class ContactHandler implements ProfileHandler {
 
     @RouteEntry(action=ActionType.UPDATE_CONTACT)
     public void updateContract(Contact contact) {
